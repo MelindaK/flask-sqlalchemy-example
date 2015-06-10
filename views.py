@@ -1,6 +1,6 @@
 from flask import render_template, request
 
-from models import Dessert, create_dessert, delete_dessert
+from models import Dessert, create_dessert, delete_dessert, update_dessert
 from app import app
 
 
@@ -44,6 +44,12 @@ def add():
 
 @app.route('/desserts/<id>')
 def view_dessert(id):
+    # if request.method == "Post":
+    #     dessert_name = request.form.get('search-name')
+    #     dessert = Dessert.query.filter_by(name=dessert_name)
+    #     if dessert:
+    #         dessert = dessert
+    #         return render_template('details.html', )
 
     # We could define this inside its own function but it's simple enough
     # that we don't really need to.
@@ -58,3 +64,24 @@ def delete(id):
     message = delete_dessert(id)
 
     return index()  # Look at the URL bar when you do this. What happens?
+
+
+@app.route('/update/<id>', methods=['GET', 'POST'])
+def update(id):
+
+    dessert = Dessert.query.get(id)
+
+    if request.method == 'GET':
+        return render_template('update.html', dessert=dessert, id=id)
+
+    dessert_name = request.form.get('name_field')
+    dessert_price = request.form.get('price_field')
+    dessert_cals = request.form.get('cals_field')
+
+    try:
+        dessert = update_dessert(id, dessert_name, dessert_price, dessert_cals)
+        return index()
+    except Exception as e:
+        # Oh no, something went wrong!
+        # We can access the error message via e.message:
+        return render_template('update.html', error=e.message)

@@ -33,6 +33,8 @@ class Menu(db.Model):
 
 
 def create_dessert(new_name, new_price, new_calories):
+    # Dessert.query.filter_by
+
     # Create a dessert with the provided input.
 
     # We need every piece of input to be provided.
@@ -44,6 +46,15 @@ def create_dessert(new_name, new_price, new_calories):
     # They can also be empty strings if submitted from a form
     if new_name == '' or new_price == '' or new_calories == '':
         raise Exception("Need name, price and calories!")
+
+    # Check that name does not already exist
+
+    if Dessert.query.filter_by(name=new_name).first() is not None:
+        raise Exception("That name already exists!")
+
+    # Check that calories is between 0 and 2000
+    if 0 > new_calories > 2000:
+        raise Exception("Really that many calories?")
 
     # This line maps to line 16 above (the Dessert.__init__ method)
     dessert = Dessert(new_name, new_price, new_calories)
@@ -76,6 +87,26 @@ def delete_dessert(id):
             return "Dessert {} deleted".format(dessert_name)
         except:
             # If something went wrong, explicitly roll back the database
+            db.session.rollback()
+            return "Something went wrong"
+    else:
+        return "Dessert not found"
+
+
+def update_dessert(id, new_name, new_price, new_calories):
+
+    dessert = Dessert.query.get(id)
+
+    if dessert:
+
+        dessert.name = new_name
+        dessert.price = new_price
+        dessert.calories = new_calories
+
+        try:
+            db.session.commit()
+            return "Dessert {} updated".format(new_name)
+        except:
             db.session.rollback()
             return "Something went wrong"
     else:

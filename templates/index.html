@@ -7,9 +7,18 @@
 
     <h3>Dessert Menu</h3>
 
+    <form action="/desserts/{{ id }}" method="POST">
+        <div class="input-group">
+            <input type="text" class="form-control" name="search-name" placeholder="Search for name...">
+            <span class="input-group-btn">
+                <button class="btn btn-default" type="submit">Go!</button>
+            </span>
+        </div>
+    </form>
+
     {% if message %}
     <div class="alert alert-info" role="alert">
-    
+
     {{ message }}
 
     </div>
@@ -21,6 +30,7 @@
         <li><a href="/desserts/{{ dessert.id }}">{{ dessert.name }}</a> - ${{ dessert.price }}, {{ dessert.calories }} calories</li>
     {% endfor %}
     </ul>
+
 
     <a href="/add" class="btn btn-success">Add Item</a>
 

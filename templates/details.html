@@ -14,10 +14,23 @@
 
     <p>Calories per dollar: {{ dessert.calories_per_dollar() }}</p>
 
+    <a href="/update/{{ dessert.id }}" class="btn btn-info">Update Item</a>
 
-    <a href="/delete/{{ dessert.id }}" class="btn btn-danger">Delete {{ dessert.name }}</a>
+    <a href="/delete/{{ dessert.id }}" class="btn btn-danger" id="delete-button">Delete {{ dessert.name }}</a>
 
 
     </div>
+<script type="text/javascript">
+
+    var delButton = document.getElementById('delete-button');
+
+    delButton.addEventListener('click', function(){
+       confirm("Are you sure you want to delete this item?")
+
+       // how can I pass the result of this into python...
+    })
+
+
+</script>
 
 </body>
