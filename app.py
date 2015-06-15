@@ -15,6 +15,7 @@ if __name__ == "__main__":
     # a risk that we may run into circular dependencies, so we do it at the
     # last minute here.
 
-    from views import *
+    # from views import *
+    from views2 import *
 
     app.run(debug=True)

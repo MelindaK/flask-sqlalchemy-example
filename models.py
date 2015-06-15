@@ -16,10 +16,11 @@ class Dessert(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     user = db.relationship("User", backref="desserts")
 
-    def __init__(self, name, price, calories):
+    def __init__(self, name, price, calories, user_id):
         self.name = name
         self.price = price
         self.calories = calories
+        self.user_id = user_id
 
     def calories_per_dollar(self):
         if self.calories:
@@ -51,7 +52,7 @@ class User(db.Model):
         self.avatar = avatar
 
 
-def create_dessert(new_name, new_price, new_calories):
+def create_dessert(new_name, new_price, new_calories, user_id):
     # Dessert.query.filter_by
 
     # Create a dessert with the provided input.
@@ -76,7 +77,7 @@ def create_dessert(new_name, new_price, new_calories):
         raise Exception("Really that many calories?")
 
     # This line maps to line 16 above (the Dessert.__init__ method)
-    dessert = Dessert(new_name, new_price, new_calories)
+    dessert = Dessert(new_name, new_price, new_calories, user_id)
 
     # Actually add this dessert to the database
     db.session.add(dessert)
@@ -130,6 +131,12 @@ def update_dessert(id, new_name, new_price, new_calories):
             return "Something went wrong"
     else:
         return "Dessert not found"
+
+
+def log_out(user_id):
+    if user_id:
+        user_id = None
+    return user_id
 
 
 if __name__ == "__main__":
